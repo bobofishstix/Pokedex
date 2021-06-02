@@ -1,41 +1,36 @@
-import * as React from 'react';
-import axios from 'axios';
-import './App.css';
-
+import * as React from "react";
+import "./App.css";
+import HttpService from "./services/HttpService.jsx";
 
 export default class GetPokemon extends React.Component {
+  service = new HttpService();
   constructor(props) {
     super(props);
 
     this.state = {
-        pokemonName: null,
-        // pokemonID: null,
-        // pokemonType: null,
-        // pokemonImage: null
+      pokemonName: null,
+      // pokemonID: null,
+      // pokemonType: null,
+      // pokemonImage: null
     };
   }
   async componentDidMount() {
-      // GET request using axios with error handling
-          axios.get('https://pokeapi.co/api/v2/pokemon/1/')
-          .then(response => this.setState({ pokemonName: response.data.name }))
-          .catch(error => {
-              // this.setState({ errorMessage: error.message });
-              console.error('There was an error!', error);
-          });
+    let response = await this.service.get("bulbasaur");
+    console.log(response.status);
+    if (response.status !== 200) {
+      this.setState({ pokemonName: "error" });
+    } else {
+      this.setState({ pokemonName: response.data.name });
+    }
   }
-    // return (
-    //   console.log(response)
-    // );
-  
+
   render() {
     return (
-      <div className='App'>
+      <div className="App">
         <p> Name:{this.state.pokemonName} </p>
         {/* <p> ID:{pokemonID} </p> */}
         {/* <p> Type:{pokemonType} </p> */}
       </div>
-    )
-
+    );
   }
 }
-
