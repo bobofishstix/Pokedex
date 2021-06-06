@@ -9,27 +9,48 @@ export default class GetPokemon extends React.Component {
 
     this.state = {
       pokemonName: null,
-      // pokemonID: null,
-      // pokemonType: null,
-      // pokemonImage: null
+      pokemonID: null,
+      pokemonType: null,
+ 
     };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
+
+  handleChange(event) {
+    this.setState({pokemonName: event.target.value});
+  }
+  handleSubmit(event) {
+    event.preventDefault();
+  }
+
   async componentDidMount() {
-    let response = await this.service.get("bulbasaur");
+    let response = await this.service.get('');
     console.log(response.status);
     if (response.status !== 200) {
       this.setState({ pokemonName: "error" });
     } else {
-      this.setState({ pokemonName: response.data.name });
+      this.setState({ 
+        pokemonName: response.data.name});
     }
   }
 
   render() {
     return (
       <div className="App">
-        <p> Name:{this.state.pokemonName} </p>
-        {/* <p> ID:{pokemonID} </p> */}
-        {/* <p> Type:{pokemonType} </p> */}
+        <div>
+          <p> Name:{this.state.pokemonName} </p>
+          <p> ID:{this.state.pokemonID} </p>
+          <p> Type:{this.state.pokemonType} </p>
+        </div>
+        <div>
+          <form onSubmit={this.handleSubmit}>
+            <label>Search for a Pokémon:
+              <input type='text' value={this.state.pokemonName} onChange={this.handleChange} />
+            </label>
+            <input type='submit' value='submit' />
+          </form>
+        </div>
       </div>
     );
   }
